@@ -1,9 +1,21 @@
 
-      insert into "netology"."store"."payment" ("payment_id", "payment", "run_date", "inserted_at")
-    (
-        select "payment_id", "payment", "run_date", "inserted_at"
-        from "payment__dbt_tmp153336011966"
-    )
+      
+  
+    
 
+  create  table "netology"."store"."payment"
+  as (
+    
+select
+    md5(cast(coalesce(cast(payment as TEXT), '') as TEXT)) as payment_id,
+    payment,
+    '2022-08-01'::date as run_date,
+    now() as inserted_at
+from "netology"."store"."sales_stg" as tab
+where tran_datetime::date = '2022-08-01'::date
 
+group by
+    1, 2
+  );
+  
   

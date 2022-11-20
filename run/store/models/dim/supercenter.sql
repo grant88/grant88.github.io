@@ -1,9 +1,22 @@
 
-      insert into "netology"."store"."supercenter" ("supercenter_id", "branch", "city", "run_date", "inserted_at")
-    (
-        select "supercenter_id", "branch", "city", "run_date", "inserted_at"
-        from "supercenter__dbt_tmp153336506416"
-    )
+      
+  
+    
 
+  create  table "netology"."store"."supercenter"
+  as (
+    
+select
+    md5(cast(coalesce(cast(branch as TEXT), '') || '-' || coalesce(cast(city as TEXT), '') as TEXT)) as supercenter_id,
+    branch,
+    city,
+    '2022-08-01'::date as run_date,
+    now() as inserted_at
+from "netology"."store"."sales_stg" as tab
+where tran_datetime::date = '2022-08-01'::date
 
+group by
+    1, 2, 3
+  );
+  
   
